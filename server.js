@@ -70,7 +70,7 @@ app.post('/api/contato', async (req, res) => {
     // envia email pra você
     await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: 'henriquedesouza245@gmail.com',
+      to: 'saitamacarecanatural@gmail.com',
       subject: 'Nova mensagem no portfólio',
       html: `
         <h2>Nova mensagem recebida</h2>
