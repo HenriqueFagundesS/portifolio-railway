@@ -104,6 +104,14 @@ app.post('/api/contato', async (req, res) => {
 });
 
 app.get('/api/contatos', async (req, res) => {
+  const chave = req.headers.authorization;
+
+  if (chave !== process.env.ADMIN_KEY) {
+    return res.status(401).json({
+      erro: 'Não autorizado'
+    });
+  }
+
   try {
 
     const resultado = await pool.query(
