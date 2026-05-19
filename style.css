@@ -545,6 +545,121 @@ header {
     transform: translateY(-3px);
 }
 
+/* Formulário de Contato */
+.contato_form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 520px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 25px;
+    border-radius: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+}
+
+.contato_input,
+.contato_textarea {
+    width: 100%;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    outline: none;
+}
+
+.contato_textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+/* Botão de envio */
+.contato_botao {
+    border: 2px solid white;
+    background: white;
+    color: #0099cc;
+    font-family: "Sansation", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 13px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.contato_botao:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.35);
+}
+
+.contato_botao:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Spinner de carregamento */
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(0, 153, 204, 0.3);
+    border-top-color: #0099cc;
+    border-radius: 50%;
+    animation: spin 0.75s linear infinite;
+    display: none;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mensagem de status */
+.contato_status {
+    min-height: 0;
+    margin: 0;
+    font-family: "Sansation", sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 14px;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.35s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+}
+
+.contato_status.visible {
+    opacity: 1;
+    max-height: 80px;
+    padding: 13px 16px;
+}
+
+.contato_status.sucesso {
+    background: rgba(255, 255, 255, 0.92);
+    color: #0a7c50;
+}
+
+.contato_status.erro {
+    background: rgba(255, 255, 255, 0.92);
+    color: #b03020;
+}
+
+.status-icone {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
 /* Media Queries */
 @media (max-width: 768px) {
     header {
@@ -664,57 +779,4 @@ header {
         text-align: center;
         padding: 10px 15px;
     }
-}
-.contato_form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-    max-width: 520px;
-    background: rgba(255, 255, 255, 0.15);
-    padding: 25px;
-    border-radius: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.35);
-}
-
-.contato_input,
-.contato_textarea {
-    width: 100%;
-    border: none;
-    border-radius: 14px;
-    padding: 14px 16px;
-    font-family: "Poppins", sans-serif;
-    font-size: 15px;
-    outline: none;
-}
-
-.contato_textarea {
-    min-height: 130px;
-    resize: vertical;
-}
-
-.contato_botao {
-    border: 2px solid white;
-    background: white;
-    color: #0099cc;
-    font-family: "Sansation", sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    padding: 13px 20px;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.contato_botao:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.35);
-}
-
-.contato_status {
-    min-height: 22px;
-    margin: 0;
-    color: white;
-    font-family: "Sansation", sans-serif;
-    text-align: center;
 }

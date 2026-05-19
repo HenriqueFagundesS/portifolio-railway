@@ -166,21 +166,18 @@
         <section class="projetos" id="projetos">
             <h2 class="projetos_titulo">Projetos</h2>
 
-<div class="sites">
-    
-    <div class="sites_site invertido">
-        <img class="sites_site_img" src="images/auracut.png" alt="AuraCut">
-        <div class="sites_site_info">
-            <h3 class="sites_site_titulo">AuraCut</h3>
-            <div>
-                <a href="https://github.com/HenriqueFagundesS/auracut" class="sites_site_botao" target="_blank">Repositório</a>
-                <a href="https://auracut.vercel.app/" class="sites_site_botao" target="_blank">Demo</a>
+            <div class="sites">
+                <div class="sites_site invertido">
+                    <img class="sites_site_img" src="images/auracut.png" alt="AuraCut">
+                    <div class="sites_site_info">
+                        <h3 class="sites_site_titulo">AuraCut</h3>
+                        <div>
+                            <a href="https://github.com/HenriqueFagundesS/auracut" class="sites_site_botao" target="_blank">Repositório</a>
+                            <a href="https://auracut.vercel.app/" class="sites_site_botao" target="_blank">Demo</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-
-</div>
-
 
             <div class="sites">
                 <div class="sites_site">
@@ -221,8 +218,6 @@
             </div>
         </section>
 
-
-
         <section class="contato" id="contato">
             <h2 class="contato_titulo">Contato</h2>
 
@@ -230,8 +225,13 @@
                 <input class="contato_input" type="text" id="nome" name="nome" placeholder="Seu nome" required>
                 <input class="contato_input" type="email" id="email" name="email" placeholder="Seu email" required>
                 <textarea class="contato_textarea" id="mensagem" name="mensagem" placeholder="Sua mensagem" required></textarea>
-                <button class="contato_botao" type="submit">Enviar mensagem</button>
-                <p class="contato_status" id="statusContato"></p>
+
+                <button class="contato_botao" type="submit">
+                    <div class="spinner" id="spinnerContato"></div>
+                    <span id="btnContatoTexto">Enviar mensagem</span>
+                </button>
+
+                <div class="contato_status" id="statusContato"></div>
             </form>
 
             <div class="contato_info">
@@ -246,17 +246,25 @@
     <script>
         const formContato = document.getElementById('formContato');
         const statusContato = document.getElementById('statusContato');
+        const spinnerContato = document.getElementById('spinnerContato');
+        const btnContatoTexto = document.getElementById('btnContatoTexto');
+        const btnContato = formContato.querySelector('button[type="submit"]');
 
         formContato.addEventListener('submit', async (evento) => {
             evento.preventDefault();
+
+            // Ativa estado de carregamento
+            btnContato.disabled = true;
+            spinnerContato.style.display = 'block';
+            btnContatoTexto.textContent = 'Enviando...';
+            statusContato.className = 'contato_status';
+            statusContato.innerHTML = '';
 
             const dados = {
                 nome: document.getElementById('nome').value,
                 email: document.getElementById('email').value,
                 mensagem: document.getElementById('mensagem').value
             };
-
-            statusContato.textContent = 'Enviando...';
 
             try {
                 const resposta = await fetch('/api/contato', {
@@ -273,10 +281,20 @@
                     throw new Error(resultado.erro || 'Erro ao enviar mensagem.');
                 }
 
-                statusContato.textContent = resultado.mensagem;
+                // Sucesso
+                statusContato.className = 'contato_status visible sucesso';
+                statusContato.innerHTML = '<span class="status-icone">✓</span><span>' + resultado.mensagem + '</span>';
                 formContato.reset();
+
             } catch (erro) {
-                statusContato.textContent = erro.message;
+                // Erro
+                statusContato.className = 'contato_status visible erro';
+                statusContato.innerHTML = '<span class="status-icone">⚠</span><span>' + erro.message + '</span>';
+            } finally {
+                // Restaura botão sempre
+                btnContato.disabled = false;
+                spinnerContato.style.display = 'none';
+                btnContatoTexto.textContent = 'Enviar mensagem';
             }
         });
     </script>
