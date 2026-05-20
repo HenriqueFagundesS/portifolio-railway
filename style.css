@@ -646,17 +646,23 @@ header {
 }
 
 .contato_status.sucesso {
-    background: rgba(255, 255, 255, 0.92);
+    background: #ffffff;
     color: #0a7c50;
+    border: 2.5px solid #0a7c50;
+    box-shadow: 0 4px 20px rgba(10, 124, 80, 0.25);
+    font-size: 17px;
 }
 
 .contato_status.erro {
-    background: rgba(255, 255, 255, 0.92);
+    background: #ffffff;
     color: #b03020;
+    border: 2.5px solid #b03020;
+    box-shadow: 0 4px 20px rgba(176, 48, 32, 0.2);
+    font-size: 17px;
 }
 
 .status-icone {
-    font-size: 18px;
+    font-size: 22px;
     flex-shrink: 0;
 }
 
