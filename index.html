@@ -246,9 +246,9 @@
     </main>
 
     <script>
-        
-
-
+        // FIX 3: Telefone montado via JS para dificultar scraping por bots simples
+        const partes = ['(11)', '97311', '-', '1672'];
+        document.getElementById('telefoneContato').textContent = partes.join('');
 
         // Utilitário: cria elemento de texto seguro (evita XSS)
         function criarElementoSeguro(tag, className, texto) {
