@@ -223,7 +223,7 @@
             <h2 class="contato_titulo">Contato</h2>
 
             <!-- FIX 2: method="POST" garante que os dados NUNCA apareçam na URL, mesmo se o JS falhar -->
-            <form class="contato_form" id="formContato" method="POST" action="/api/contato">
+            <form class="contato_form" id="formContato" method="POST">
                 <input class="contato_input" type="text" id="nome" name="nome" placeholder="Seu nome" required>
                 <input class="contato_input" type="email" id="email" name="email" placeholder="Seu email" required>
                 <textarea class="contato_textarea" id="mensagem" name="mensagem" placeholder="Sua mensagem" required></textarea>
