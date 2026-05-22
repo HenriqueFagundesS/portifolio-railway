@@ -43,9 +43,12 @@ const limiteAdmin = rateLimit({
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production'
-    ? { rejectUnauthorized: true } // ✅ FIX 5 — true em produção (false = vulnerável a MITM)
+    ? { rejectUnauthorized: false } // Railway usa certificado autoassinado
     : false,
 });
+
+
+
 
 // ✅ FIX 6 — Escapa HTML para evitar XSS no email enviado via Resend
 function escapeHtml(str) {
