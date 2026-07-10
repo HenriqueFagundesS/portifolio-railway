@@ -1,163 +1,165 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const { Pool } = require('pg');
-const { Resend } = require('resend');
-require('dotenv').config();
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+// const express = require('express');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const cors = require('cors');
+// const path = require('path');
+// const { Pool } = require('pg');
+// const { Resend } = require('resend');
+// require('dotenv').config();
 
-app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(__dirname)));
+// const app = express();
+// const PORT = process.env.PORT || 3000;
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl:
-    process.env.NODE_ENV === 'production'
-      ? { rejectUnauthorized: false }
-      : false,
-});
+// const resend = new Resend(process.env.RESEND_API_KEY);
 
-async function criarTabela() {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS contatos (
-      id SERIAL PRIMARY KEY,
-      nome VARCHAR(100) NOT NULL,
-      email VARCHAR(150) NOT NULL,
-      mensagem TEXT NOT NULL,
-      criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-  `);
-}
+// app.use(cors());
+// app.use(express.json());
+// app.use(express.static(path.join(__dirname)));
 
-app.get('/api/status', (req, res) => {
-  res.json({ mensagem: 'API funcionando' });
-});
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl:
+//     process.env.NODE_ENV === 'production'
+//       ? { rejectUnauthorized: false }
+//       : false,
+// });
 
-app.post('/api/contato', async (req, res) => {
-  try {
-    const { nome, email, mensagem } = req.body;
+// async function criarTabela() {
+//   await pool.query(`
+//     CREATE TABLE IF NOT EXISTS contatos (
+//       id SERIAL PRIMARY KEY,
+//       nome VARCHAR(100) NOT NULL,
+//       email VARCHAR(150) NOT NULL,
+//       mensagem TEXT NOT NULL,
+//       criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+//     );
+//   `);
+// }
 
-    if (!nome || !email || !mensagem) {
-      return res.status(400).json({
-        erro: 'Preencha nome, email e mensagem.',
-      });
-    }
+// app.get('/api/status', (req, res) => {
+//   res.json({ mensagem: 'API funcionando' });
+// });
 
-    const emailValido =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+// app.post('/api/contato', async (req, res) => {
+//   try {
+//     const { nome, email, mensagem } = req.body;
 
-    if (!emailValido) {
-      return res.status(400).json({
-        erro: 'Digite um email válido.',
-      });
-    }
+//     if (!nome || !email || !mensagem) {
+//       return res.status(400).json({
+//         erro: 'Preencha nome, email e mensagem.',
+//       });
+//     }
 
-    // salva no banco
-    await pool.query(
-      'INSERT INTO contatos (nome, email, mensagem) VALUES ($1, $2, $3)',
-      [
-        nome.trim(),
-        email.trim(),
-        mensagem.trim()
-      ]
-    );
+//     const emailValido =
+//       /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-    // envia email pra você
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: 'saitamacarecanatural@gmail.com',
-      subject: 'Nova mensagem no portfólio',
-      html: `
-        <h2>Nova mensagem recebida</h2>
+//     if (!emailValido) {
+//       return res.status(400).json({
+//         erro: 'Digite um email válido.',
+//       });
+//     }
 
-        <p><strong>Nome:</strong> ${nome}</p>
+//     // salva no banco
+//     await pool.query(
+//       'INSERT INTO contatos (nome, email, mensagem) VALUES ($1, $2, $3)',
+//       [
+//         nome.trim(),
+//         email.trim(),
+//         mensagem.trim()
+//       ]
+//     );
 
-        <p><strong>Email:</strong> ${email}</p>
+//     // envia email pra você
+//     await resend.emails.send({
+//       from: 'onboarding@resend.dev',
+//       to: 'saitamacarecanatural@gmail.com',
+//       subject: 'Nova mensagem no portfólio',
+//       html: `
+//         <h2>Nova mensagem recebida</h2>
 
-        <p><strong>Mensagem:</strong></p>
+//         <p><strong>Nome:</strong> ${nome}</p>
 
-        <div style="padding:10px;border:1px solid #ccc">
-          ${mensagem}
-        </div>
-      `
-    });
+//         <p><strong>Email:</strong> ${email}</p>
 
-    res.status(201).json({
-      mensagem: 'Mensagem enviada com sucesso!'
-    });
+//         <p><strong>Mensagem:</strong></p>
 
-  } catch (error) {
-    console.error(
-      'Erro ao salvar contato:',
-      error
-    );
+//         <div style="padding:10px;border:1px solid #ccc">
+//           ${mensagem}
+//         </div>
+//       `
+//     });
 
-    res.status(500).json({
-      erro: 'Erro ao enviar mensagem.'
-    });
-  }
-});
+//     res.status(201).json({
+//       mensagem: 'Mensagem enviada com sucesso!'
+//     });
 
-app.get('/api/contatos', async (req, res) => {
-  const chave = req.headers.authorization;
+//   } catch (error) {
+//     console.error(
+//       'Erro ao salvar contato:',
+//       error
+//     );
 
-  if (chave !== process.env.ADMIN_KEY) {
-    return res.status(401).json({
-      erro: 'Não autorizado'
-    });
-  }
+//     res.status(500).json({
+//       erro: 'Erro ao enviar mensagem.'
+//     });
+//   }
+// });
 
-  try {
+// app.get('/api/contatos', async (req, res) => {
+//   const chave = req.headers.authorization;
 
-    const resultado = await pool.query(
-      `SELECT
-      id,
-      nome,
-      email,
-      mensagem,
-      criado_em
-      FROM contatos
-      ORDER BY criado_em DESC`
-    );
+//   if (chave !== process.env.ADMIN_KEY) {
+//     return res.status(401).json({
+//       erro: 'Não autorizado'
+//     });
+//   }
 
-    res.json(resultado.rows);
+//   try {
 
-  } catch (error) {
+//     const resultado = await pool.query(
+//       `SELECT
+//       id,
+//       nome,
+//       email,
+//       mensagem,
+//       criado_em
+//       FROM contatos
+//       ORDER BY criado_em DESC`
+//     );
 
-    console.error(
-      'Erro ao buscar contatos:',
-      error
-    );
+//     res.json(resultado.rows);
 
-    res.status(500).json({
-      erro:'Erro ao buscar mensagens.'
-    });
-  }
-});
+//   } catch (error) {
 
-criarTabela()
-  .then(() => {
+//     console.error(
+//       'Erro ao buscar contatos:',
+//       error
+//     );
 
-    app.listen(PORT, () => {
-      console.log(
-        `Servidor rodando na porta ${PORT}`
-      );
-    });
+//     res.status(500).json({
+//       erro:'Erro ao buscar mensagens.'
+//     });
+//   }
+// });
 
-  })
-  .catch((error) => {
+// criarTabela()
+//   .then(() => {
 
-    console.error(
-      'Erro ao conectar no banco:',
-      error
-    );
+//     app.listen(PORT, () => {
+//       console.log(
+//         `Servidor rodando na porta ${PORT}`
+//       );
+//     });
 
-    process.exit(1);
-  });
+//   })
+//   .catch((error) => {
+
+//     console.error(
+//       'Erro ao conectar no banco:',
+//       error
+//     );
+
+//     process.exit(1);
+//   });
   
-  //dsamndksajksald
+//   //dsamndksajksald
