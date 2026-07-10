@@ -253,61 +253,7 @@
         </section>
     </main>
 
-    <!-- <script>
-        const formContato = document.getElementById('formContato');
-        const statusContato = document.getElementById('statusContato');
-        const spinnerContato = document.getElementById('spinnerContato');
-        const btnContatoTexto = document.getElementById('btnContatoTexto');
-        const btnContato = formContato.querySelector('button[type="submit"]');
 
-        formContato.addEventListener('submit', async (evento) => {
-            evento.preventDefault();
-
-            // Ativa estado de carregamento
-            btnContato.disabled = true;
-            spinnerContato.style.display = 'block';
-            btnContatoTexto.textContent = 'Enviando...';
-            statusContato.className = 'contato_status';
-            statusContato.innerHTML = '';
-
-            const dados = {
-                nome: document.getElementById('nome').value,
-                email: document.getElementById('email').value,
-                mensagem: document.getElementById('mensagem').value
-            };
-
-            try {
-                const resposta = await fetch('/api/contato', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(dados)
-                });
-
-                const resultado = await resposta.json();
-
-                if (!resposta.ok) {
-                    throw new Error(resultado.erro || 'Erro ao enviar mensagem.');
-                }
-
-                // Sucesso
-                statusContato.className = 'contato_status visible sucesso';
-                statusContato.innerHTML = '<span class="status-icone">✓</span><span>' + resultado.mensagem + '</span>';
-                formContato.reset();
-
-            } catch (erro) {
-                // Erro
-                statusContato.className = 'contato_status visible erro';
-                statusContato.innerHTML = '<span class="status-icone">⚠</span><span>' + erro.message + '</span>';
-            } finally {
-                // Restaura botão sempre
-                btnContato.disabled = false;
-                spinnerContato.style.display = 'none';
-                btnContatoTexto.textContent = 'Enviar mensagem';
-            }
-        });
-    </script> -->
 </body>
 
 </html>
